@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎉 CKY专属生日星空 🎂</title>
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  height: 100vh;
+  background: radial-gradient(circle at 50% 30%, #3b1e69 0%, #0d0221 60%, #050014 100%);
+  background-attachment: fixed;
+  position: relative;
+  font-family: "Comic Sans MS", "Microsoft YaHei", sans-serif;
+}
+
+/* 星空闪烁层 */
+.star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background-color: #fff;
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: twinkle 3s infinite ease-in-out;
+}
+
+/* 飘动文字 */
+.text-item {
+  position: absolute;
+  color: #fff;
+  font-size: 18px;
+  white-space: nowrap;
+  text-shadow: 0 0 8px rgba(255,255,255,0.9), 0 0 20px currentColor;
+  opacity: 0.85;
+  user-select: none;
+  animation: floatText 10s linear infinite;
+}
+
+/* 掉落蛋糕 */
+.cake-item {
+  position: absolute;
+  font-size: 32px;
+  user-select: none;
+  text-shadow: 0 0 10px #fff;
+}
+
+/* 星星闪烁 */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+/* 轻微浮动动画 */
+@keyframes floatText {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(10px) rotate(2deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+</style>
+</head>
+<body>
+
+<script>
+// 配置
+const config = {
+  texts: [
+    "🎉 生日快乐呀 CKY！",
+    "💫 11月8号 生日快乐",
+    "🦋 别熬夜 保持好心情！",
+    "🌸 今天属于你的一天",
+    "🎁 心想事成！",
+    "💖 快许下三个愿望吧 ✨",
+    "🌈 天冷了多穿衣服！",
+    "✨ 希望你永远笑得像今天一样灿烂",
+    "🌷 今天不用长大做一个快乐的小朋友就好",
+    "🎈 愿所有烦恼都消失！"
+  ],
+  textColors: ["#ff8fab", "#b794f6", "#80ffea", "#ffdf80", "#ffb6c1", "#7aff9c", "#89f7fe"],
+  textCount: 50,
+  textSpeedRange: [0.5, 1.5],
+  cakeCount: 25,
+  cakeSpeedRange: [1, 2.5]
+};
+
+// 星星背景
+function createStars() {
+  for (let i = 0; i < 200; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+    star.style.left = `${Math.random() * 100}vw`;
+    star.style.top = `${Math.random() * 100}vh`;
+    star.style.animationDuration = `${2 + Math.random() * 3}s`;
+    document.body.appendChild(star);
+  }
+}
+
+// 飘字
+function createFloatingText() {
+  const textItem = document.createElement("div");
+  textItem.className = "text-item";
+  textItem.innerText = config.texts[Math.floor(Math.random() * config.texts.length)];
+  textItem.style.color = config.textColors[Math.floor(Math.random() * config.textColors.length)];
+  textItem.style.left = `${Math.random() * 100}vw`;
+  textItem.style.top = `${-Math.random() * 100}vh`;
+  textItem.style.fontSize = `${16 + Math.random() * 10}px`;
+  textItem.speed = config.textSpeedRange[0] + Math.random() * (config.textSpeedRange[1] - config.textSpeedRange[0]);
+  document.body.appendChild(textItem);
+  return textItem;
+}
+
+// 掉落蛋糕
+function createFallingCake() {
+  const cakeItem = document.createElement("div");
+  cakeItem.className = "cake-item";
+  cakeItem.innerText = "🎂";
+  cakeItem.style.left = `${Math.random() * 100}vw`;
+  cakeItem.style.top = `${-Math.random() * 50}vh`;
+  cakeItem.speed = config.cakeSpeedRange[0] + Math.random() * (config.cakeSpeedRange[1] - config.cakeSpeedRange[0]);
+  document.body.appendChild(cakeItem);
+  return cakeItem;
+}
+
+// 初始化
+createStars();
+const textItems = Array.from({ length: config.textCount }, createFloatingText);
+const cakeItems = Array.from({ length: config.cakeCount }, createFallingCake);
+
+// 动画
+function animate() {
+  textItems.forEach(item => {
+    item.style.top = `${parseFloat(item.style.top) + item.speed}px`;
+    if (parseFloat(item.style.top) > window.innerHeight) {
+      item.style.top = `${-Math.random() * 100}vh`;
+      item.style.left = `${Math.random() * 100}vw`;
+    }
+  });
+
+  cakeItems.forEach(item => {
+    item.style.top = `${parseFloat(item.style.top) + item.speed}px`;
+    if (parseFloat(item.style.top) > window.innerHeight) {
+      item.style.top = `${-Math.random() * 50}vh`;
+      item.style.left = `${Math.random() * 100}vw`;
+    }
+  });
+
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+
+</body>
+</html>
